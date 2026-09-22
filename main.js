@@ -6,12 +6,9 @@ const letrasMinusculas = 'abcdefghijklmnopqrstuvwxyz';
 const numeros = '0123456789';
 const simbolos = '!@#\$%&*?';
 
-// CORREÇÃO: Faltava o ponto (.) para indicar que é uma classe CSS
 const botoes = document.querySelectorAll('.parametro-senha__botao');
 const campoSenha = document.querySelector('#campo-senha');
 const checkbox = document.querySelectorAll('.checkbox');
-
-// CORREÇÃO: Faltava o ponto (.) para indicar a classe da força
 const forcaSenha = document.querySelector('.forca'); 
 
 botoes[0].onclick = diminuiTamanho;
@@ -21,7 +18,6 @@ function diminuiTamanho() {
     if (tamanhoSenha > 1) {
         tamanhoSenha--;
     }
-    // CORREÇÃO: Estava escrito textContect (com c), o correto é textContent
     numeroSenha.textContent = tamanhoSenha;
     geraSenha();
 }
@@ -34,7 +30,6 @@ function aumentaTamanho() {
     geraSenha();
 }
 
-// CORREÇÃO: Adicionado 'let' no contador do loop for
 for (let i = 0; i < checkbox.length; i++) {
     checkbox[i].onclick = geraSenha;
 }
@@ -49,12 +44,18 @@ function geraSenha() {
     if (checkbox[1].checked) {
         alfabeto = alfabeto + letrasMinusculas;
     }
-    // CORREÇÃO: Estava com vírgula (checkbox[2],checked), o correto é ponto (.)
     if (checkbox[2].checked) {
         alfabeto = alfabeto + numeros;
     }
     if (checkbox[3].checked) {
         alfabeto = alfabeto + simbolos;
+    }
+
+    // CORREÇÃO: Se o alfabeto estiver vazio (nenhuma caixa marcada), limpa o campo e não executa o loop
+    if (alfabeto.length === 0) {
+        campoSenha.value = 'Selecione uma opção';
+        classificaSenha(0);
+        return; // Para a execução do código aqui
     }
 
     let senha = '';
@@ -67,19 +68,17 @@ function geraSenha() {
     classificaSenha(alfabeto.length);
 } 
 
-// CORREÇÃO: Faltavam as chaves { } abrindo e fechando a função inteira
 function classificaSenha(tamanhoAlfabeto) {
-    let entropia = tamanhoSenha * Math.log2(tamanhoAlfabeto);
+    // Se o tamanho do alfabeto for 0, a entropia também deve ser 0 para evitar o NaN
+    let entropia = tamanhoAlfabeto > 0 ? tamanhoSenha * Math.log2(tamanhoAlfabeto) : 0;
     console.log(entropia);
-
-    // CORREÇÃO: Evita erro se o cálculo da entropia der "NaN" (quando nenhuma caixinha está marcada)
-    if (isNaN(entropia)) {
-        entropia = 0;
-    }
 
     forcaSenha.classList.remove('fraca', 'media', 'forte');
 
-    if (entropia > 57) {
+    // CORREÇÃO: Se a entropia for 0 (sem opções marcadas), remove todas as cores da barra
+    if (entropia === 0) {
+        // Nenhuma classe de força é adicionada
+    } else if (entropia > 57) {
         forcaSenha.classList.add('forte');
     } else if (entropia > 35 && entropia < 57) {
         forcaSenha.classList.add('media');
@@ -88,5 +87,9 @@ function classificaSenha(tamanhoAlfabeto) {
     }
 
     const valorEntropia = document.querySelector('.entropia');
-    valorEntropia.textContent = `Um computador pode levar até ${Math.floor(2 ** entropia / (100e6 * 60 * 60 * 24))} dias para descobrir essa senha.`;
+    if (entropia === 0) {
+        valorEntropia.textContent = "Selecione pelo menos um tipo de caractere.";
+    } else {
+        valorEntropia.textContent = `Um computador pode levar até ${Math.floor(2 ** entropia / (100e6 * 60 * 60 * 24))} dias para descobrir essa senha.`;
+    }
 }
