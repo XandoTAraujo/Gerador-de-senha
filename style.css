@@ -40,7 +40,7 @@ body{
     color: var(--branco);
     font-family: var(--roboto-mono);
     font-size: 40px;
-    width: 70px;
+    width: 100%; /* CORRIGIDO: mudado de 70px para 100% para a senha não sumir para o lado */
     }
 
     #campo-senha:focus{
@@ -52,7 +52,7 @@ body{
         max-width: 1200px;
         margin: 0 auto;
     }
-    
+   
     .parametro{
         background-color: var(--fundo-texto);
         border: 2px solid var(--borda);
