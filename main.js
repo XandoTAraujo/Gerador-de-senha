@@ -9,7 +9,7 @@ const simbolos = '!@#\$%&*?';
 const botoes = document.querySelectorAll('.parametro-senha__botao');
 const campoSenha = document.querySelector('#campo-senha');
 const checkbox = document.querySelectorAll('.checkbox');
-const forcaSenha = document.querySelector('.forca'); 
+const forcaSenha = document.querySelector('.forca');
 
 botoes[0].onclick = diminuiTamanho;
 botoes[1].onclick = aumentaTamanho;
@@ -66,7 +66,7 @@ function geraSenha() {
     }
     campoSenha.value = senha;
     classificaSenha(alfabeto.length);
-} 
+}
 
 function classificaSenha(tamanhoAlfabeto) {
     // Se o tamanho do alfabeto for 0, a entropia também deve ser 0 para evitar o NaN
